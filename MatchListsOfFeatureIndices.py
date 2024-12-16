@@ -2,13 +2,29 @@ import re
 
 def find_matching_indices(first_list_str, second_list):
     first_list = []
-    # Split on commas that are followed by a new title and number pattern
-    pairs = re.split(r',(?=\s*[^:]+:\s*\d+)', first_list_str)
+    # Clean up second_list if it's a string
+    if isinstance(second_list, str):
+        second_list = [int(x.strip()) for x in re.findall(r'\d+', second_list)]
+    
+    # Split only on pattern: comma followed by text then number and colon
+    pairs = re.split(r',(?=\s*[^,]+:\s*\d+\s*(?:,|$))', first_list_str)
     
     for pair in pairs:
-        title, index_str = pair.strip().split(':')
-        index = int(index_str)
-        first_list.append((index, title))
+        pair = pair.strip()
+        if ':' not in pair:
+            continue
+            
+        try:
+            # Split on last occurrence of colon-number pattern
+            match = re.search(r'(.+):(\s*\d+)\s*$', pair)
+            if match:
+                title = match.group(1).strip()
+                # Replace any remaining colons with spaces
+                title = ' '.join(title.replace(':', ' ').split())
+                index = int(match.group(2))
+                first_list.append((index, title))
+        except (ValueError, IndexError):
+            continue
     
     second_list_set = set(second_list)
     matching_indices = []
@@ -17,7 +33,7 @@ def find_matching_indices(first_list_str, second_list):
         if index in second_list_set:
             matching_indices.append((index, title))
             
-    return matching_indices
+    return sorted(matching_indices, key=lambda x: x[0])
 
 # This first list is the selection of elements related to deception and betrayal from the GemmaScope res 16k which we selected based on neuronpedia keyword search
 
