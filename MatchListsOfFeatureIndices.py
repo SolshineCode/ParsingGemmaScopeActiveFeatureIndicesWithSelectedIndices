@@ -1,19 +1,23 @@
+import re
+
 def find_matching_indices(first_list_str, second_list):
-
-  first_list = []
-  for pair in first_list_str.split(','):
-    title, index_str = pair.strip().split(':')
-    index = int(index_str)
-    first_list.append((index, title))
-
-  second_list_set = set(second_list)
-  matching_indices = []
-
-  for index, title in first_list:
-    if index in second_list_set:
-      matching_indices.append((index, title))
-
-  return matching_indices
+    first_list = []
+    # Split on commas that are followed by a new title and number pattern
+    pairs = re.split(r',(?=\s*[^:]+:\s*\d+)', first_list_str)
+    
+    for pair in pairs:
+        title, index_str = pair.strip().split(':')
+        index = int(index_str)
+        first_list.append((index, title))
+    
+    second_list_set = set(second_list)
+    matching_indices = []
+    
+    for index, title in first_list:
+        if index in second_list_set:
+            matching_indices.append((index, title))
+            
+    return matching_indices
 
 # This first list is the selection of elements related to deception and betrayal from the GemmaScope res 16k which we selected based on neuronpedia keyword search
 
@@ -40,8 +44,8 @@ def find_matching_indices(first_list_str, second_list):
 #
 
 
-first_list_str = "elements related to plots, schemes, or acts of deception and betrayal: 14971, references to deception or falsehoods in political discourse: 1741, instances of the prefix "mis-" indicating incorrectness or deception: 6806, terms related to artificiality and deception: 8927, references to public perceptions and potential deception in political contexts: 128, assertions and statements related to deception or dishonesty: 5195, terms and concepts related to deception and falsification, particularly in the context of news and information: 10248, phrases related to deception and the consequences of being discovered: 13090, situations involving deception or trickery: 6382, terms related to deception or misleading behavior: 10634, terms related to false or deceptive representations: 2950, words related to deception or manipulation strategies: 6442, instances or references to falsehoods or deception, particularly in the context of news and information: 8637, contexts involving secrecy and deception, particularly regarding interactions and relationships: 5665, phrases indicating the use of deceptive or false information: 11020, words and phrases that imply deception, guilt, or moral ambiguity: 13208, phrases that convey deception or misleading appearances: 11308, instances of deception and impersonation in relation to identity and authority: 7469, terms related to deception and false representations: 4394, elements related to deception and secret identities in a narrative: 14650, phrases that convey deception or misleading appearances: 11308, instances of deception and impersonation in relation to identity and authority: 7469, terms related to deception and false representations: 4394, references to political deception and manipulation: 4139, instances of the word "lie" and its variations, indicating a focus on deception or falsehoods: 11933, references to deception and betrayal: 10042, instances of deceptive or misleading actions and requests related to personal information or transactions: 1343, instances of the word "lie" in various contexts, particularly related to deception or falsehoods: 5390, terms related to deception and falsehoods, particularly in media and narratives: 8233, references to deceptive actions or techniques: 4436, elements related to deception and disguise: 10319, content related to deception and accountability: 12348, terms related to personal relationships characterized by deception and manipulation: 11483, phrases related to deception and superficiality in social contexts: 9040, instances of the word "lie" and its variations, indicating themes of deception or falsehood: 3654, references to deception and manipulation in narratives: 8735, words and phrases related to deception and manipulation: 5298, terms associated with deception and illusion: 3632, instances of deception and manipulation tactics: 10206, references to tricks or deceptive techniques: 5768, deceptive or manipulative tactics and strategies: 16143, terms and phrases related to deception and manipulation: 9623, words related to deception and abstraction: 12432, terms related to vanity, deception, and personal struggle: 14753, words related to deception and betrayal: 12412, elements related to deception and dishonesty: 12895, references to the character Sullivan and related themes of deception and identity: 15206, arguments related to false narratives and deception in society: 8001, references to deception or falsehoods, particularly concerning "fake" news and related concepts: 9312, instances of deception or failed expectations: 5797"
-second_list = [6631, 10934,  5644, 12693,  8684,  5499, 15468,  9622,  9622, 16291,
+first_list_str = """elements related to plots, schemes, or acts of deception and betrayal: 14971, references to deception or falsehoods in political discourse: 1741, instances of the prefix "mis-" indicating incorrectness or deception: 6806, terms related to artificiality and deception: 8927, references to public perceptions and potential deception in political contexts: 128, assertions and statements related to deception or dishonesty: 5195, terms and concepts related to deception and falsification, particularly in the context of news and information: 10248, phrases related to deception and the consequences of being discovered: 13090, situations involving deception or trickery: 6382, terms related to deception or misleading behavior: 10634, terms related to false or deceptive representations: 2950, words related to deception or manipulation strategies: 6442, instances or references to falsehoods or deception, particularly in the context of news and information: 8637, contexts involving secrecy and deception, particularly regarding interactions and relationships: 5665, phrases indicating the use of deceptive or false information: 11020, words and phrases that imply deception, guilt, or moral ambiguity: 13208, phrases that convey deception or misleading appearances: 11308, instances of deception and impersonation in relation to identity and authority: 7469, terms related to deception and false representations: 4394, elements related to deception and secret identities in a narrative: 14650, phrases that convey deception or misleading appearances: 11308, instances of deception and impersonation in relation to identity and authority: 7469, terms related to deception and false representations: 4394, references to political deception and manipulation: 4139, instances of the word "lie" and its variations, indicating a focus on deception or falsehoods: 11933, references to deception and betrayal: 10042, instances of deceptive or misleading actions and requests related to personal information or transactions: 1343, instances of the word "lie" in various contexts, particularly related to deception or falsehoods: 5390, terms related to deception and falsehoods, particularly in media and narratives: 8233, references to deceptive actions or techniques: 4436, elements related to deception and disguise: 10319, content related to deception and accountability: 12348, terms related to personal relationships characterized by deception and manipulation: 11483, phrases related to deception and superficiality in social contexts: 9040, instances of the word "lie" and its variations, indicating themes of deception or falsehood: 3654, references to deception and manipulation in narratives: 8735, words and phrases related to deception and manipulation: 5298, terms associated with deception and illusion: 3632, instances of deception and manipulation tactics: 10206, references to tricks or deceptive techniques: 5768, deceptive or manipulative tactics and strategies: 16143, terms and phrases related to deception and manipulation: 9623, words related to deception and abstraction: 12432, terms related to vanity, deception, and personal struggle: 14753, words related to deception and betrayal: 12412, elements related to deception and dishonesty: 12895, references to the character Sullivan and related themes of deception and identity: 15206, arguments related to false narratives and deception in society: 8001, references to deception or falsehoods, particularly concerning "fake" news and related concepts: 9312, instances of deception or failed expectations: 5797"""
+second_list = """6631, 10934,  5644, 12693,  8684,  5499, 15468,  9622,  9622, 16291,
           9622, 16265, 13132,  8684,  8684,  8684,  4614,  5644,  1672,  9622,
           8350, 11538,  4825,  9856,  8073, 10934,  7981,  3276, 10295,  9728,
           7644, 13110, 12213,  4614,  5816,  1672,  3186,  2539,  5837,  6779,
@@ -82,7 +86,7 @@ second_list = [6631, 10934,  5644, 12693,  8684,  5499, 15468,  9622,  9622, 162
           4522, 14537, 11778, 14924,  6027,  5695, 10461, 15509,  4682,  5644,
          12755,  8005, 10782, 12748,  5695, 12748,  8556, 15010,  3825,  5164,
           9536,  8684,  8073, 10934, 11255, 12748, 12748, 12748, 12748,  6631,
-          3375,  9536,  8684, 12748, 12748, 12748,  5113,  6345,  9102,  6345]
+          3375,  9536,  8684, 12748, 12748, 12748,  5113,  6345,  9102,  6345"""
 
 matching_indices = find_matching_indices(first_list_str, second_list)
 
